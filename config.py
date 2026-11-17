@@ -17,6 +17,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'crm.db'}")
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 
+# Keamanan: Allowlist User ID Telegram (dipisahkan koma)
+ALLOWED_USERS = [int(u.strip()) for u in os.getenv("ALLOWED_USERS", "").split(",") if u.strip()]
+
 DATA_SOURCE = os.getenv("DATA_SOURCE", "synthetic")  # synthetic | csv
 CSV_PATH = Path(os.getenv("CSV_PATH", str(BASE_DIR / "data" / "clients.csv")))
 N_CLIENTS = int(os.getenv("N_CLIENTS", "1500"))

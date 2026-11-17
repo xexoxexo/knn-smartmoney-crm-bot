@@ -25,10 +25,27 @@ log = logging.getLogger("bot")
 
 NLP = IntentClassifier.from_file()
 BUNDLES: dict = {}  # target -> model KNN, diisi saat startup
+IS_DEMO = config.DATA_SOURCE == "synthetic"
+
 HELP = ("<b>Perintah</b>\n/klien izaki - prediksi smart money &amp; indikator keuangan klien\n"
         "/prediksi key=value ... - prediksi dari data baru\n/fitur - pemetaan fitur CRM (Tabel 5)\n"
-        "/riwayat - 5 prediksi terakhir\n/analisis - hasil evaluasi algoritma KNN\n/stats - statistik CRM\n\n"
+        "/riwayat - 5 prediksi terakhir\n/analisis - hasil evaluasi algoritma KNN\n/stats - statistik CRM\n"
+        "/hapus_riwayat - hapus riwayat prediksi Anda\n\n"
         "Atau tanya bebas: <i>apakah klien 12 smart money?</i>")
+
+
+def restricted(func):
+    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        u = update.effective_user
+        if not u: return
+        # Default deny: Jika data nyata aktif, cek allowlist.
+        if not IS_DEMO:
+            if u.id not in config.ALLOWED_USERS:
+                log.warning("Unauthorized access attempt: user_id=%s username=%s", u.id, u.username)
+                await update.effective_message.reply_text("Maaf, akses ke data nyata dibatasi. Silakan hubungi admin.")
+                return
+        return await func(update, context)
+    return wrapper
 
 
 def touch(update: Update):
@@ -98,6 +115,7 @@ async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(HELP, parse_mode=ParseMode.HTML)
 
 
+@restricted
 async def klien_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     touch(update)
     cid = normalize_client_id(context.args[0]) if context.args else None
@@ -107,6 +125,7 @@ async def klien_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await run_client(update, cid)
 
 
+@restricted
 async def prediksi_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     touch(update)
     raw, bad = {}, []
@@ -131,6 +150,7 @@ async def prediksi_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(format_card("Data manual", raw, preds), parse_mode=ParseMode.HTML)
 
 
+@restricted
 async def fitur_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     touch(update)
     lines = ["<b>Pemetaan fitur CRM → target</b> (Tabel 5)"]
@@ -140,6 +160,7 @@ async def fitur_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text("\n".join(lines), parse_mode=ParseMode.HTML)
 
 
+@restricted
 async def riwayat_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = touch(update)
     rows = crm.recent_predictions(u.id)
@@ -152,6 +173,13 @@ async def riwayat_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text("\n".join(lines), parse_mode=ParseMode.HTML)
 
 
+async def hapus_riwayat_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    u = touch(update)
+    crm.delete_history(u.id)
+    await update.effective_message.reply_text("Riwayat prediksimu telah dihapus.")
+
+
+@restricted
 async def analisis_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     touch(update)
     path = config.REPORT_DIR / "metrics.json"
@@ -178,6 +206,7 @@ async def analisis_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.effective_message.reply_photo(fh)
 
 
+@restricted
 async def stats_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     touch(update)
     s = crm.stats()
@@ -232,7 +261,7 @@ def main():
 
     app = Application.builder().token(config.BOT_TOKEN).build()
     for name, fn in [("start", start_cmd), ("help", help_cmd), ("klien", klien_cmd), ("prediksi", prediksi_cmd),
-                     ("fitur", fitur_cmd), ("riwayat", riwayat_cmd), ("analisis", analisis_cmd), ("stats", stats_cmd)]:
+                     ("fitur", fitur_cmd), ("riwayat", riwayat_cmd), ("hapus_riwayat", hapus_riwayat_cmd), ("analisis", analisis_cmd), ("stats", stats_cmd)]:
         app.add_handler(CommandHandler(name, fn))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     log.info("Bot berjalan. Tekan Ctrl+C untuk berhenti.")

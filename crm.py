@@ -100,6 +100,12 @@ def recent_predictions(user_id, limit=5) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def delete_history(user_id):
+    with engine.begin() as c:
+        c.execute(predictions.delete().where(predictions.c.user_id == user_id))
+        c.execute(interactions.delete().where(interactions.c.user_id == user_id))
+
+
 def stats() -> dict:
     with engine.connect() as c:
         count = lambda t: c.execute(select(func.count()).select_from(t)).scalar()
