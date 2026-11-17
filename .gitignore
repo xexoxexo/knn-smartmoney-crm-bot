@@ -1,0 +1,25 @@
+# Environment variables (Sangat penting agar rahasia/API key tidak bocor)
+.env
+.env.local
+.env.example
+
+# Python cache dan file bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+.venv/
+env/
+venv/
+
+# Folder data, models, dan reports lokal (sesuaikan jika isinya perlu di-track)
+data/
+models/
+reports/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+crm.db
