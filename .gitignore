@@ -15,7 +15,7 @@ env/
 venv/
 
 # Folder data, models, dan reports lokal (sesuaikan jika isinya perlu di-track)
-data/
+
 models/
 reports/
 

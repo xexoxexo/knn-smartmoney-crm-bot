@@ -1,0 +1,191 @@
+{
+  "intents": [
+    {
+      "tag": "sapaan",
+      "patterns": [
+        "halo",
+        "hai",
+        "hi bot",
+        "selamat pagi",
+        "selamat siang",
+        "selamat sore",
+        "selamat malam",
+        "halo kak",
+        "hey",
+        "assalamualaikum",
+        "permisi min"
+      ],
+      "responses": [
+        "Halo {nama}! 👋 Aku chatbot CRM yang memprediksi pola smart money (pengelolaan dana cerdas) klien dengan algoritma KNN. Coba: cek klien izaki"
+      ]
+    },
+    {
+      "tag": "bantuan",
+      "patterns": [
+        "bantuan",
+        "help",
+        "menu",
+        "bisa apa saja",
+        "kamu bisa ngapain",
+        "fitur apa saja",
+        "cara pakai bot",
+        "gimana cara pakainya",
+        "perintah apa saja",
+        "tolong jelaskan cara penggunaan"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "prediksi_klien",
+      "patterns": [
+        "cek klien izaki",
+        "apakah klien 12 smart money",
+        "prediksi klien c0005",
+        "analisis klien C0100",
+        "klien 25 termasuk smart money tidak",
+        "cek kondisi keuangan klien 7",
+        "bagaimana kondisi smart money klien c0033",
+        "prediksi smart money untuk klien 45",
+        "klien c0008 laba tinggi tidak",
+        "apakah klien 9 punya dana darurat",
+        "cek risiko anggaran klien 14",
+        "klien C0020 sesuai anggaran",
+        "profil keuangan klien 3",
+        "lihat klien c0001"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "prediksi_manual",
+      "patterns": [
+        "cara prediksi data keuangan saya",
+        "mau input data keuangan manual",
+        "prediksi dari data baru",
+        "cara memasukkan data keuangan sendiri",
+        "prediksi klien baru",
+        "bagaimana input data klien baru",
+        "saya punya data keuangan mau diprediksi",
+        "gimana cara input data sendiri",
+        "cara input data manual",
+        "bisa prediksi data keuangan perusahaan saya",
+        "input data keuangan baru"
+      ],
+      "responses": [
+        "Kirim data dengan format key=value, contoh:\n/prediksi total_revenue=5000 total_profit=1400 emergency_fund_balance=600 annual_expenses=3200 annual_budget=3500\n\nKolom yang tidak diisi diganti nilai median data latih. Daftar kolom: /fitur"
+      ]
+    },
+    {
+      "tag": "riwayat",
+      "patterns": [
+        "riwayat analisis saya",
+        "lihat riwayat",
+        "history prediksi",
+        "prediksi terakhir saya",
+        "hasil analisis sebelumnya",
+        "riwayat prediksi",
+        "lihat history",
+        "apa yang sudah saya cek"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "fitur_data",
+      "patterns": [
+        "fitur apa saja yang dipakai",
+        "kolom data apa saja",
+        "variabel keuangan apa yang diproses",
+        "target prediksinya apa saja",
+        "pemetaan fitur crm",
+        "data apa yang dianalisis",
+        "apa saja indikator yang dinilai"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "tentang_knn",
+      "patterns": [
+        "apa itu knn",
+        "jelaskan algoritma knn",
+        "k nearest neighbors itu apa",
+        "bagaimana knn bekerja",
+        "kenapa pakai knn",
+        "cara kerja k nearest neighbor",
+        "penjelasan knn",
+        "knn itu apa sih"
+      ],
+      "responses": [
+        "K-Nearest Neighbors (KNN) mengklasifikasikan data baru berdasarkan K data latih yang paling mirip menurut jarak (Euclidean, Manhattan, dst.). Di bot ini, profil keuangan klien diubah menjadi 15 fitur (rasio margin, dana darurat, rasio biaya, dll.), dinormalisasi, lalu K klien paling mirip \"memilih\" labelnya. KNN yang sama dipakai untuk memahami maksud pesanmu."
+      ]
+    },
+    {
+      "tag": "tentang_smart_money",
+      "patterns": [
+        "apa itu smart money",
+        "smart money itu apa",
+        "jelaskan konsep smart money",
+        "apa arti smart money",
+        "bagaimana smart money diukur",
+        "definisi smart money",
+        "kenapa klien disebut smart money",
+        "kriteria smart money apa"
+      ],
+      "responses": [
+        "Dalam penelitian ini smart money = pengelolaan dana/investasi yang cerdas dan berbasis data. Secara operasional, klien dinilai dari 7 indikator sehat: laba tinggi, dana darurat memadai, sesuai anggaran, peluang investasi tinggi, kontrol biaya terjaga, risiko anggaran rendah, dan beban gaji wajar. Klien dengan minimal 6 dari 7 indikator berlabel smart money. KNN lalu mempelajari pola tersebut dari data CRM."
+      ]
+    },
+    {
+      "tag": "evaluasi_model",
+      "patterns": [
+        "akurasi model knn",
+        "evaluasi model",
+        "seberapa akurat prediksinya",
+        "performa model",
+        "hasil analisis algoritma knn",
+        "berapa nilai k terbaik",
+        "lihat confusion matrix",
+        "f1 score model",
+        "hasil pengujian model",
+        "seberapa bagus modelnya",
+        "perbandingan dengan random forest"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "terima_kasih",
+      "patterns": [
+        "terima kasih",
+        "makasih",
+        "thanks",
+        "thx",
+        "mantap makasih",
+        "oke makasih banyak",
+        "trims"
+      ],
+      "responses": [
+        "Sama-sama, {nama}! 🙌",
+        "Senang bisa membantu! Ingat: ini keluaran model statistik sebagai pendukung keputusan, bukan saran investasi."
+      ]
+    },
+    {
+      "tag": "pamit",
+      "patterns": [
+        "bye",
+        "dadah",
+        "sampai jumpa",
+        "sampai nanti",
+        "udah dulu ya",
+        "cukup sekian"
+      ],
+      "responses": [
+        "Sampai jumpa, {nama}! 👋"
+      ]
+    },
+    {
+      "tag": "fallback",
+      "patterns": [],
+      "responses": [
+        "Maaf, aku belum paham maksudmu 🙏. Coba: \"cek klien \", \"apa itu smart money\", atau ketik /help."
+      ]
+    }
+  ]
+}
